@@ -27,6 +27,8 @@ import static java.util.stream.Collectors.groupingBy;
 public class SmallLogFileProcessorImpl extends AbstractLogFileProcessor {
     final static Logger log = Logger.getLogger(SmallLogFileProcessorImpl.class.getName());
 
+    final RecordParser parser = new RecordParser();
+
     @Override
     public Report process(ReportRequest request) throws IOException {
         try (final InputStream inputStream = request.getLogFile().openStream()) {
@@ -54,7 +56,6 @@ public class SmallLogFileProcessorImpl extends AbstractLogFileProcessor {
     }
 
     private List<Record> loadAllRecords(InputStream inputStream) {
-        final var parser = new RecordParser();
         return new BufferedReader(new InputStreamReader(inputStream, Charset.defaultCharset()))
                 .lines()
                 .map(line -> {
